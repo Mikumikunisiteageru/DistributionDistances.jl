@@ -2,7 +2,17 @@
 
 module DistributionDistances
 
+using Cuba: cuhre
+using Distributions
+
 export wasserstein
+
+function integrate(f, a, b; abstol=1e-12, reltol=1e-12)
+	d = b - a
+	g(x, y) = y[1] = f(a + d * x[1])
+	result, err = cuhre(g; atol=abstol/d, rtol=reltol)
+	return d * result[1]
+end
 
 function mergesorted(v1, v2)
 	n1, n2 = length(v1), length(v2)
@@ -31,7 +41,7 @@ function mergesorted(v1, v2)
 end
 
 function wasserstein(x1::AbstractVector{<:Real}, x2::AbstractVector{<:Real}; p::Real=1)
-	p < 1 && raise(DomainError(p), "`p >= 1` must hold in Wasserstein distance")
+	p < 1 && throw(DomainError(p, "`p >= 1` must hold in Wasserstein distance"))
 	n1, n2 = length(x1), length(x2)
 	x1, x2 = sort(x1), sort(x2)
 	v1 = [(i//n1, x1[min(n1, i+1)], 1) for i = 1:n1]
@@ -46,6 +56,12 @@ function wasserstein(x1::AbstractVector{<:Real}, x2::AbstractVector{<:Real}; p::
 		j == 1 ? f1 = f : f2 = f
 	end
 	return s ^ (1//p)
+end
+
+function wasserstein(f1::UnivariateDistribution, f2::UnivariateDistribution; 
+		p::Real=1, intkwargs...)
+	f(t) = abs(quantile(f1, t) - quantile(f2, t)) ^ p
+	return integrate(f, 0, 1; intkwargs...) ^ (1//p)
 end
 
 end # module DistributionDistances
