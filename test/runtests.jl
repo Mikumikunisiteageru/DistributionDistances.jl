@@ -15,4 +15,6 @@ Aqua.test_deps_compat(DistributionDistances)
 
 @testset "wasserstein" begin
 	@test isapprox(0.65, wasserstein([1,1,2,3], [0.8,2.5,3.5]))
+	@test isapprox(0.65, wasserstein([1,1,2,3,1,1,2,3], [0.8,2.5,3.5]))
+	@test isapprox(0.65, wasserstein([1,1,2,3,1,1,2,3], [0.8,2.5,3.5,0.8,2.5,3.5]))
 end
