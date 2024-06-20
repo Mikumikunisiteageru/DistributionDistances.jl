@@ -1,0 +1,16 @@
+name = "DistributionDistances"
+uuid = "dd25b439-681d-42e3-8987-f041be2a151c"
+authors = ["Yu-Chang YANG <yang.yc.allium@gmail.com>"]
+version = "0.0.1"
+
+[compat]
+Aqua = "0.8"
+Test = "1"
+julia = "1"
+
+[extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Aqua", "Test"]
